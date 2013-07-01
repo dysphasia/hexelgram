@@ -11,12 +11,14 @@ $(function () {
 
 	var fileReaderLoad = function (e) { 
  		var dataUri = e.target.result;
- 		var $img = $("<img />").attr("src", dataUri);
-
+ 		var $img = $("<img />").load(onImageLoad).attr("src", dataUri);
        	CONFIG.$image = $img; 
-       	CONFIG.height = $img.get(0).height;
-      	CONFIG.width = $img.get(0).width;
+	};
 
+	var onImageLoad = function (e) {
+		console.log(e);
+       	CONFIG.height = e.target.height;
+      	CONFIG.width = e.target.width;
       	renderCanvas();
 	};
 	
