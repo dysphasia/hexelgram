@@ -16,8 +16,9 @@ $(function () {
 	};
 
 	var onImageLoad = function (e) {
-       	CONFIG.height = e.target.height;
+		CONFIG.height = e.target.height;
       	CONFIG.width = e.target.width;
+		cacheCanvas();
       	renderCanvas();
 	};
 	
@@ -37,6 +38,17 @@ $(function () {
 
 
 	/*** RENDERING ***/
+
+	var cacheCanvas = function () {
+		var canvas = document.createElement('canvas');
+			canvas.height = CONFIG.height;
+			canvas.width = CONFIG.width;
+		var ctx = canvas.getContext('2d');
+			ctx.drawImage(CONFIG.$image.get(0), 0, 0);
+
+		CONFIG.cache.canvas = canvas;
+		CONFIG.cache.ctx = ctx;
+	};
 
 	var renderCanvas = function () {
 		var type = CONFIG.render;
