@@ -1,7 +1,7 @@
 body { }
 
 #container { width:960px;  margin:20px auto; }
-#options { float: left; }
+#options div { float: left; }
 
 
 .pixel { width: 15px; height: 15px; position: absolute; z-index: 10; border:1px solid #fff;}
