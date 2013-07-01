@@ -32,7 +32,7 @@ RENDER.pixel = function () {
 		return pixel;
 	};
 
-	var placePixel = function (pixel, row, col) {
+	var placePixel = function (pixel, col, row) {
 
 		var imgData=ctx.createImageData(size,size);
 
@@ -43,15 +43,15 @@ RENDER.pixel = function () {
 			imgData.data[i+3]=pixel.a;
   		}
 
-		ctx.putImageData(imgData, row, col);
+		ctx.putImageData(imgData, col, row);
 	};
 
-	for (var row=0; row<canvas.width; row+=size) {
-		for (var col=0; col<canvas.height; col+=size) {
+	for (var row=0; row<canvas.height; row+=size) {
+		for (var col=0; col<canvas.width; col+=size) {
 
-			var data = ctx.getImageData(row, col, size, size).data;
+			var data = ctx.getImageData(col, row, size, size).data;
 			var pixel = getPixelAverage(data);
-			placePixel(pixel, row, col);
+			placePixel(pixel, col, row);
 		}
 	};
 
