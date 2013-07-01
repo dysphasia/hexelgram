@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+
+		<script src="js/libs/jquery.min.js"></script>	
+		<script src="js/libs/jquery.nesty.js"></script>	
+
+		<script src="js/render/normal.js"></script>		
+		<script src="js/render/pixel.js"></script>		
+		<script src="js/render/hexel.js"></script>		
+
+		<script src="js/config.js"></script>
+		<script src="js/dom.js"></script>
+		<script src="js/script.js"></script>
+	</head>
+
+	<body>
+		
+		<div id="container">	
+
+			<div id="options">
+
+				<div>				
+					<input type="file" id="input-image" />		
+				</div>
+
+				<div>
+					<label for="select-display">Display As</label>
+					<select id="select-display">
+						<option value="normal">Normal</option>
+						<option value="pixel">Pixel</option>
+						<option value="hexel">Hexel</option>
+					</select>
+				</div>
+
+				<div>
+					<label for="pixel-size">Pixel Size</label>
+					<input id="pixel-size" type="number" value="16" min="5" />
+				</div>
+
+			</div> <!-- #options -->
+
+
+			<div id="canvas-holder">
+				<canvas id="canvas"></canvas>
+			</div>
+
+		</div> <!-- #container -->
+
+	</body>
+
+</html>
