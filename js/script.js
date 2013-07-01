@@ -16,7 +16,6 @@ $(function () {
 	};
 
 	var onImageLoad = function (e) {
-		console.log(e);
        	CONFIG.height = e.target.height;
       	CONFIG.width = e.target.width;
       	renderCanvas();
