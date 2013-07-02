@@ -2,7 +2,7 @@ var RENDER = RENDER || {};
 
 RENDER.pixel = function () {
 	
-	var getPixelAverage = function (ctx, data, size) {
+	var getPixelAverage = function (data, size) {
 		var pixel = { r:0, g:0, b:0};
 		var total = data.length/4;
 
@@ -16,41 +16,51 @@ RENDER.pixel = function () {
 		pixel.g = Math.floor(pixel.g/total);
 		pixel.b = Math.floor(pixel.b/total);
 		
-		var imgData=ctx.createImageData(size, size);
+		return pixel; 
+	};
 
-		for (var i=0; i<imgData.data.length; i+=4) {
-			imgData.data[i+0]=pixel.r;
-			imgData.data[i+1]=pixel.g;
-			imgData.data[i+2]=pixel.b;
-			imgData.data[i+3]=255;
-		}
+	var drawRect = function (ctx, pixel, x, y, w, h) {
+	    ctx.fillStyle = "rgba(" + pixel.r + "," + pixel.g + "," + pixel.b + ", 1)";
+	    ctx.fillRect(x, y, w, h);
+	};
 
-		return imgData; 
+	var renderFinalImage = function (ctx) {
+		var imgData = ctx.getImageData(0, 0, CONFIG.width, CONFIG.height)
+		DOM.$canvas.attr('height', CONFIG.height).attr('width', CONFIG.width);;
+		DOM.context.putImageData(imgData, 0, 0);
 	};
 
 	var init = (function () {
 
 		var size = CONFIG.pixelSize;
-		var row, col, pixelData;
+		var pixelArray = [];
 
 		var cTemp = document.createElement('canvas');
 			cTemp.height = CONFIG.height;
 			cTemp.width = CONFIG.width;
 		var ctxTemp = cTemp.getContext('2d');
 
-		for (var row=0; row<canvas.height; row+=size) {
-			for (var col=0; col<canvas.width; col+=size) {
-				var img = CONFIG.cache.ctx.getImageData(col, row, size, size);
-				var data = img.data;
-				var pixel = getPixelAverage(ctxTemp, data, size);
-				ctxTemp.putImageData(pixel, col, row);
-				console.log(pixel)
-			}
+		for (var y=0; y<canvas.height; y+=size) {
+			for (var x=0; x<canvas.width; x+=size) {
+				var pixel = { 
+					img: CONFIG.cache.ctx.getImageData(x, y, size, size), 
+					x:x, 
+					y:y, 
+					w:size, 
+					h:size 
+				};
+				pixelArray.push(pixel);
+			};
 		};
 
-		var imgData = ctxTemp.getImageData(0, 0, CONFIG.width, CONFIG.height)
-		DOM.$canvas.attr('height', CONFIG.height).attr('width', CONFIG.width);;
-		DOM.context.putImageData(imgData, 0, 0);
+		for (var i=0; i<pixelArray.length; ++i) {
+			var pixel = pixelArray[i];
+			var data = pixel.img.data;
+			var avg = getPixelAverage(data, size);
+			drawRect(ctxTemp, avg, pixel.x, pixel.y, pixel.w, pixel.h);
+		}	
+
+		renderFinalImage(ctxTemp);
 
 	}());
 
