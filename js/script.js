@@ -18,6 +18,7 @@ $(function () {
 	var onImageLoad = function (e) {
 		CONFIG.height = e.target.height;
       	CONFIG.width = e.target.width;
+      	setCanvasSize();
 		cacheCanvas();
       	renderCanvas();
 	};
@@ -38,6 +39,10 @@ $(function () {
 
 
 	/*** RENDERING ***/
+
+	var setCanvasSize = function () {
+		DOM.$canvas.attr('height', CONFIG.height).attr('width', CONFIG.width);
+	};
 
 	var cacheCanvas = function () {
 		var canvas = document.createElement('canvas');

@@ -25,8 +25,7 @@ RENDER.pixel = function () {
 	};
 
 	var renderFinalImage = function (ctx) {
-		var imgData = ctx.getImageData(0, 0, CONFIG.width, CONFIG.height)
-		DOM.$canvas.attr('height', CONFIG.height).attr('width', CONFIG.width);;
+		var imgData = ctx.getImageData(0, 0, CONFIG.width, CONFIG.height);
 		DOM.context.putImageData(imgData, 0, 0);
 	};
 

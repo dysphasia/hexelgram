@@ -7,6 +7,5 @@ RENDER.normal = function () {
 	};
 
 	var imgData = CONFIG.cache.ctx.getImageData(0, 0, attr.width, attr.height)
-	DOM.$canvas.attr(attr);
 	DOM.context.putImageData(imgData, 0, 0);
 };
