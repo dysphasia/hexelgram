@@ -1,5 +1,3 @@
-var RENDER = RENDER || {};
-
 RENDER.hexel = function () {
 
 	var hexel;

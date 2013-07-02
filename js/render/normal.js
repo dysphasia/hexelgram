@@ -1,5 +1,3 @@
-var RENDER = RENDER || {};
-
 RENDER.normal = function () {
 	var attr = {
 		height : CONFIG.height,
