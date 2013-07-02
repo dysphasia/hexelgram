@@ -39,7 +39,23 @@ RENDER.hexel = function () {
 		}
 	};
  
-	var drawHexagon = function (center, ctx, img) {
+ 	var drawHexagonPixel = function (ctx, center, color) {
+		ctx.beginPath();
+
+		ctx.moveTo(center.x + hexel.cos[0], center.y + hexel.sin[0]);
+		for (var i=1; i<=6; i+=1) {
+		    ctx.lineTo(center.x + hexel.cos[i], center.y + hexel.sin[i]);
+		}
+
+		ctx.closePath();
+
+	    ctx.fillStyle = "rgba(" + color.r + "," + color.g + "," + color.b + ", 1)";
+		ctx.lineHeight = 0;	
+		ctx.fill();
+ 	};
+
+
+	var drawHexagonMask = function (center, ctx, img) {
 		ctx.save();
 
 		ctx.beginPath();
@@ -65,26 +81,24 @@ RENDER.hexel = function () {
 	var getHexelAverage = function (ctx, width, height) {
 		var img = ctx.getImageData(0, 0, width, height);
 		var data = img.data;
-		var total = data.length/4;
-		var hexel = { r:0, g:0, b:0, a:0 };
+		var total = 0;
+		var color = { r:0, g:0, b:0, a:0 };
 
 		for (var i=0; i<data.length; i+=4) {
-			hexel.r += data[i+0];
-			hexel.g += data[i+1];
-			hexel.b += data[i+2];
+			if (data[i+4]==0) {
+				continue;
+			}
+			color.r += data[i+0];
+			color.g += data[i+1];
+			color.b += data[i+2];
+			total += 1;
 		}
 
-		hexel.r = Math.floor(hexel.r/total);
-		hexel.g = Math.floor(hexel.g/total);
-		hexel.b = Math.floor(hexel.b/total);
+		color.r = Math.floor(color.r/total);
+		color.g = Math.floor(color.g/total);
+		color.b = Math.floor(color.b/total);
 
-		for (var i=0; i<data.length; i+=4) {
-			img.data[i+0]=hexel.r;
-			img.data[i+1]=hexel.g;
-			img.data[i+2]=hexel.b;
-		}
-
-		return img;	
+		return color;	
 	};
 
 	var compositeImages = function (ctx, img, col, row) {
@@ -103,6 +117,8 @@ RENDER.hexel = function () {
 		var row, col, pixelData;
 		var i = 0;
 
+		
+
 		// draw the unaltered image to the canvas
 		initCanvas(ctx, size);
 
@@ -116,7 +132,7 @@ RENDER.hexel = function () {
 		var ctx2 = c2.getContext("2d");
 
 		// loop through rows and columns
-		for (var col=0; col<canvas.width; col+=hexel.period) {
+		for (var col=-hexel.width; col<canvas.width; col+=hexel.period) {
 			var hexcol = col/size;
 			var isEven = (i%2==0);
 			var offset = (isEven) ? 0 : -hexel.apothem;
@@ -131,13 +147,14 @@ RENDER.hexel = function () {
 				// mask the current image section with 
 				// a hexagon on temp canvas
 				var center = { x:hexel.radius, y:hexel.apothem };
-				drawHexagon(center, ctx2, img);
+				drawHexagonMask(center, ctx2, img);
 
 				// get average of pixels with 0 alpha
-				var img = getHexelAverage(ctx2, hexel.width, hexel.height);
+				var color = getHexelAverage(ctx2, hexel.width, hexel.height);
 
-				// composite image data
-				compositeImages(ctx, img, col, row);
+				// darw hexel to main canvas
+				var center = { x:col+hexel.radius, y:row+hexel.apothem};
+				drawHexagonPixel(ctx, center, color);
 			};
 		};
 
