@@ -4,15 +4,6 @@ RENDER.hexel = function () {
 
 	/*** HELPERS ***/
 
-	var initCanvas = function (ctx, size) {
-		var attr = {
-			height : Math.floor(CONFIG.height / size) * size,
-			width : Math.floor(CONFIG.width / size) * size
-		};
-		DOM.$canvas.attr(attr);
-		ctx.drawImage(CONFIG.$image.get(0), 0, 0);		
-	}
-
 	var initHexelProperties = function (side) {
 
 		var sqrt3 = Math.sqrt(3);
@@ -99,12 +90,6 @@ RENDER.hexel = function () {
 		return color;	
 	};
 
-	var compositeImages = function (ctx, img, col, row) {
-		ctx.globalCompositeOperation="destination-over";
-		ctx.putImageData(img, col, row);
-	};
-
-
 	/*** INIT ***/
 
 	var init = (function() {
@@ -115,11 +100,7 @@ RENDER.hexel = function () {
 		var row, col, pixelData;
 		var i = 0;
 
-		
-
-		// draw the unaltered image to the canvas
-		initCanvas(ctx, size);
-
+	
 		// init hexel properties
 		initHexelProperties(size);
 	
@@ -139,7 +120,7 @@ RENDER.hexel = function () {
 			for (var row=offset; row<canvas.height; row+=hexel.height) {
 
 				// get the box containing each hexel
-				var img = ctx.getImageData(col, row, hexel.width, hexel.height);
+				var img = CONFIG.cache.ctx.getImageData(col, row, hexel.width, hexel.height);
 				var data = img.data;
 
 				// mask the current image section with 
