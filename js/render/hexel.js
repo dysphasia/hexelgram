@@ -4,6 +4,10 @@ RENDER.hexel = function () {
 
 	/*** HELPERS ***/
 
+	var initCanvas = function() {
+		DOM.context.putImageData(CONFIG.cache.img, 0, 0)
+	}
+
 	var initHexelProperties = function (side) {
 
 		var sqrt3 = Math.sqrt(3);
@@ -13,11 +17,12 @@ RENDER.hexel = function () {
 		hexel = {};
 		hexel.side = side;
 		hexel.radius = side;
-		hexel.apothem = Math.cos(30 * rad) * hexel.side;		
+		hexel.apothem = Math.floor(Math.cos(30 * rad) * hexel.side);		
 		hexel.height = 2 * hexel.apothem;
 		hexel.width = 2 * hexel.radius;
-		hexel.edge = Math.sin(30 * rad) * hexel.side;
+		hexel.edge = Math.ceil(Math.sin(30 * rad) * hexel.side);
 		hexel.period = hexel.width - hexel.edge;
+		hexel.double = hexel.period * 2;
 		hexel.sin = [];
 		hexel.cos = [];
 
@@ -30,7 +35,6 @@ RENDER.hexel = function () {
  
  	var drawHexagonPixel = function (ctx, center, color) {
 		ctx.beginPath();
-
 		ctx.moveTo(center.x + hexel.cos[0], center.y + hexel.sin[0]);
 		for (var i=1; i<=6; i+=1) {
 		    ctx.lineTo(center.x + hexel.cos[i], center.y + hexel.sin[i]);
@@ -44,15 +48,10 @@ RENDER.hexel = function () {
  	};
 
  	var initHexagonMask = function (ctx, center) {
-		ctx.beginPath();
 		ctx.moveTo(center.x + hexel.cos[0], center.y + hexel.sin[0]);
 		for (var i=1; i<=6; i+=1) {
 		    ctx.lineTo(center.x + hexel.cos[i], center.y + hexel.sin[i]);
 		}
-		ctx.closePath();
-		ctx.fillStyle = "#FFFFFF";
-		ctx.lineHeight = 0;
-		ctx.fill();
  	};
 
 	var drawHexagonMask = function (ctx, img) {
@@ -63,8 +62,7 @@ RENDER.hexel = function () {
 		ctx.restore();
 	};
 
-	var getHexelAverage = function (ctx, width, height) {
-		var data = ctx.getImageData(0, 0, width, height).data;
+	var getHexelAverage = function (data, width, height) {
 		var total = 0;
 		var color = { r:0, g:0, b:0, a:0 };
 
@@ -85,53 +83,66 @@ RENDER.hexel = function () {
 		return color;	
 	};
 
+	var renderHalfScreen = function (isEven) {
+		var startX, startY;
+
+		if (isEven) {
+			startX = -hexel.edge;
+			startY = 0;
+		} else {
+			startX = -hexel.width;
+			startY = -hexel.apothem;
+		}
+
+		// init hex mask
+		var canvas = document.createElement("canvas");
+			canvas.height = CONFIG.cache.canvas.height;
+			canvas.width = CONFIG.cache.canvas.width;
+		var ctx = canvas.getContext('2d');
+
+		// loop through rows and columns		
+		ctx.beginPath();		
+		for (var x=startX; x<canvas.width; x+=hexel.double) {
+			for (var y=startY; y<canvas.height; y+=hexel.height) {
+				initHexagonMask(ctx, { x:hexel.radius+x, y:hexel.apothem+y });
+			}
+		}
+
+		ctx.closePath();
+		ctx.fillStyle = "#FFFFFF";
+		ctx.lineHeight = 0;		
+		ctx.fill();		
+		
+		drawHexagonMask(ctx, CONFIG.cache.img);
+		
+		var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+		for (var x=startX; x<canvas.width; x+=hexel.double) {
+			for (var y=startY; y<canvas.height; y+=hexel.height) {
+				var data = RENDER.getImageData(x, y, hexel.width, hexel.height, canvas.width, canvas.height, imgData);
+				var color = getHexelAverage(data, hexel.width, hexel.height);				
+				var centerGrid = { x:x+hexel.radius, y:y+hexel.apothem};
+				drawHexagonPixel(DOM.context, centerGrid, color);
+			}
+		}
+	}
+
+
+
 	/*** INIT ***/
 
 	var init = (function() {
-
-		// init data for operation
-		var size = CONFIG.pixelSize;
-		var ctx = DOM.context;
-		var row, col, pixelData;
-		var i = 0;
-		var centerGrid;
-	
 		// init hexel properties
-		initHexelProperties(size);
+		initHexelProperties(CONFIG.pixelSize);
+
+		initCanvas();
 	
-		// init hex mask canvas
-		var c2 = document.createElement("canvas");
-			c2.height=Math.ceil(hexel.height);
-			c2.width=Math.ceil(hexel.width);
-		var ctx2 = c2.getContext("2d");
-		
-		// init hex mask
-		initHexagonMask(ctx2, { x:hexel.radius, y:hexel.apothem });
+		// render half of the image using
+		// alternating columns
+		renderHalfScreen(true);
+		renderHalfScreen(false);
 
-		// loop through rows and columns
-		for (var col=-hexel.width; col<canvas.width; col+=hexel.period) {
-			var hexcol = col/size;
-			var isEven = (i%2==0);
-			var offset = (isEven) ? 0 : -hexel.apothem;
-			i++;
-			
-			for (var row=offset; row<canvas.height; row+=hexel.height) {
-
-				// get the box containing each hexel
-				var img = CONFIG.cache.ctx.getImageData(col, row, c2.width, c2.height);
-
-				// mask the current image section with a hexagon
-				drawHexagonMask(ctx2, img);
-
-				// get average of pixels with 0 alpha
-				var color = getHexelAverage(ctx2, hexel.width, hexel.height);
-
-				// draw hexel to main canvas
-				centerGrid = { x:col+hexel.radius, y:row+hexel.apothem};
-				drawHexagonPixel(ctx, centerGrid, color);
-			};
-		};
-
+		var omega = Date.now();
 	}());
 
 
