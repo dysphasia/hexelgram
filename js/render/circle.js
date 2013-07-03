@@ -1,9 +1,5 @@
 RENDER.circle = function () {
 
-	var initCanvas = function (data) {
-
-	};
-
 	var getColorAverage = function (data) {
 		var color = { r:0, g:0, b:0};
 		var total = 0; 
