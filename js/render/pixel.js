@@ -30,12 +30,12 @@ RENDER.pixel = function () {
 
 		var canvas = DOM.$canvas.get(0);
 		var ctx = DOM.context;
-		var imgData = CONFIG.cache.imgData;
+		var imgData = CONFIG.cache.data;
 		var pixelSize = CONFIG.pixelSize;
 
 		for (var y=0; y<canvas.height; y+=pixelSize) {
 			for (var x=0; x<canvas.width; x+=pixelSize) {			
-				var data = RENDER.getImageData(x, y, pixelSize, pixelSize, canvas.width, canvas.height, imgData.data);
+				var data = RENDER.getImageData(x, y, pixelSize, pixelSize, canvas.width, canvas.height, imgData);
 				var color = getColorAverage(data);
 				drawRect(ctx, color, x, y, pixelSize, pixelSize);
 			}
