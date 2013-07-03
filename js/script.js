@@ -53,7 +53,8 @@ $(function () {
 
 		CONFIG.cache.canvas = canvas;
 		CONFIG.cache.ctx = ctx;
-		CONFIG.cache.imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+		CONFIG.cache.img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+		CONFIG.cache.data = CONFIG.cache.img.data;
 	};
 
 	var renderCanvas = function () {
