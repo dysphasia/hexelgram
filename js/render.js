@@ -5,8 +5,8 @@ var RENDER = {
 
 		for (var r=y; r<h+y; r+=1) {
 			for (var c=x; c<w+x; c+=1) {
-				var O = (r*W*4) + (c * 4);
-				var o = ((r-y)*w*4) + ((c-x) * 4);
+				var O = ((r*W) + c) << 2;
+				var o = (((r-y)*w) + (c-x)) << 2;
 				if (c<0 || c>W || r<0 || r>H) {
 					arr[o+0] = 0;
 					arr[o+1] = 0;
