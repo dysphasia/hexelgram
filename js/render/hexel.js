@@ -4,10 +4,6 @@ RENDER.hexel = function () {
 
 	/*** HELPERS ***/
 
-	var initCanvas = function() {
-		DOM.context.putImageData(CONFIG.cache.img, 0, 0)
-	}
-
 	var initHexelProperties = function (side) {
 
 		var sqrt3 = Math.sqrt(3);
@@ -17,7 +13,7 @@ RENDER.hexel = function () {
 		hexel = {};
 		hexel.side = side;
 		hexel.radius = side;
-		hexel.apothem = Math.floor(Math.cos(30 * rad) * hexel.side);		
+		hexel.apothem = Math.floor(Math.cos(30 * rad) * hexel.side);
 		hexel.height = 2 * hexel.apothem;
 		hexel.width = 2 * hexel.radius;
 		hexel.edge = Math.ceil(Math.sin(30 * rad) * hexel.side);
@@ -25,7 +21,6 @@ RENDER.hexel = function () {
 		hexel.double = hexel.period * 2;
 		hexel.sin = [];
 		hexel.cos = [];
-
 		for (var i=0; i<7; ++i) {
 			var ipi = i * thirdpi;
 			hexel.cos[i] = hexel.side * Math.cos(ipi);
@@ -117,6 +112,7 @@ RENDER.hexel = function () {
 		
 		var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
+
 		for (var x=startX; x<canvas.width; x+=hexel.double) {
 			for (var y=startY; y<canvas.height; y+=hexel.height) {
 				var data = RENDER.getImageData(x, y, hexel.width, hexel.height, canvas.width, canvas.height, imgData);
@@ -132,10 +128,9 @@ RENDER.hexel = function () {
 	/*** INIT ***/
 
 	var init = (function() {
+
 		// init hexel properties
 		initHexelProperties(CONFIG.pixelSize);
-
-		initCanvas();
 	
 		// render half of the image using
 		// alternating columns

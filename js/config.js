@@ -1,4 +1,5 @@
 var CONFIG = {
+	imageLoaded : false,
 	$image : null,
 	height : 0,
 	width : 0,

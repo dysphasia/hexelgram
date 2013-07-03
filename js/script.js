@@ -51,6 +51,7 @@ $(function () {
 		var ctx = canvas.getContext('2d');
 			ctx.drawImage(CONFIG.$image.get(0), 0, 0);
 
+		CONFIG.imageLoaded = true;
 		CONFIG.cache.canvas = canvas;
 		CONFIG.cache.ctx = ctx;
 		CONFIG.cache.img = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -62,6 +63,10 @@ $(function () {
 		var func = RENDER[type];
 		
 		if (!func) { 
+			return;
+		}
+
+		if (!CONFIG.imageLoaded) {
 			return;
 		}
 
