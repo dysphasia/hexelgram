@@ -7,6 +7,7 @@ $(function () {
 	DOM.$inputPixelSize = $("#pixel-size");
 	DOM.$container = $("#container");
 	DOM.$canvas = $("#canvas");
-	DOM.context = DOM.$canvas[0].getContext("2d");
+	DOM.canvas = document.getElementById('canvas');
+	DOM.context = DOM.canvas.getContext("2d");
 
 });
