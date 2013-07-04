@@ -2,6 +2,7 @@ body { }
 
 #container { width:960px;  margin:20px auto; }
 #options div { float: left; }
+#options div input[type="range"] { width: 300px; }
 
 
 .pixel { width: 15px; height: 15px; position: absolute; z-index: 10; border:1px solid #fff;}
