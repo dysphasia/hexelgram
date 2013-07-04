@@ -1,11 +1,3 @@
-pixel-processing
-================
-
-just messing around with pixels, you know how we do
-
-* [turning Nick into pixel divs using php](http://pancaketheorem.com/stuff/pixelprocessing/nick.php)
-* [turning me into pixel divs using javascript](http://pancaketheorem.com/stuff/pixelprocessing/jenn.html)
-
 hexelgrid
 =========
 
