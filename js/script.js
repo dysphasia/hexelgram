@@ -36,6 +36,15 @@ $(function () {
 
       	renderCanvas();
 	};
+	
+	var onSaveSubmit = function(e) {
+		
+		/* Nick, I'm converting the Canvas to PNG data and opening it in a new window
+		 If we want to save it to the filesystem, I'll need to use PHP - not sorry! xoxo j$ */
+		 
+		var savedPNG = DOM.canvas.toDataURL("image/png");
+		window.open(savedPNG,'_blank');
+	};
 
 
 	/*** RENDERING ***/
@@ -81,6 +90,7 @@ $(function () {
 		DOM.$inputImage.change(onImageUpload);
 		DOM.$displaySelect.change(onDisplaySelectChange);
 		DOM.$inputPixelSize.change(onPixelSizeChange);
+		DOM.$save.click(onSaveSubmit);
 
 	}());
 

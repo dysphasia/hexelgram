@@ -1,13 +1,13 @@
-hexelgrid
+hexelgram
 =========
 
 a simple hexel drawing app using javascript and canvas
 
-Demo here: http://downwith.us/hexel
+Demo here: http://downwith.us/hexelgram
 
 The MIT License (MIT)
 
-Copyright (c) 2013 Nicholas Ortenzio 
+Copyright (c) 2013 Nicholas Ortenzio, Jenn Schiffer
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

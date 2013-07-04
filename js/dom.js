@@ -9,5 +9,6 @@ $(function () {
 	DOM.$canvas = $("#canvas");
 	DOM.canvas = document.getElementById('canvas');
 	DOM.context = DOM.canvas.getContext("2d");
+	DOM.$save = $("#save-png");
 
 });
