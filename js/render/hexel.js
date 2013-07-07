@@ -136,8 +136,6 @@ RENDER.hexel = function () {
 		// alternating columns
 		renderHalfScreen(true);
 		renderHalfScreen(false);
-
-		var omega = Date.now();
 	}());
 
 
