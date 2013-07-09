@@ -1,4 +1,4 @@
-<script src="http://downwith.us/hexelgram/js/readme.js"></script>
+
 
 hexelgram
 =========
